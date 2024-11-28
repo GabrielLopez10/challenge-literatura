@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -117,6 +119,10 @@ public class LibroService {
         return libroRepository.findAllWithAutor();
     }
 
+    public List<Libro> buscarLibroPorTitulo(String nombreLibro) {
+        return libroRepository.findByTituloContainsIgnoreCase(nombreLibro);
+    }
+
     public List<Libro> buscarLibroPorAutor(String nombreAutor){
         return libroRepository.findByAutor_NombreContainsIgnoreCase(nombreAutor);
     }
@@ -138,5 +144,12 @@ public class LibroService {
                     return anioNacimiento <= anio && (anioFallecimiento == null || anioFallecimiento > anio);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, Long> mostrarEstadisticasLibrosPorIdioma() {
+        List<Libro> libros = libroRepository.findAll();
+
+        return libros.stream()
+                .collect(Collectors.groupingBy(Libro::getIdioma, Collectors.counting()));
     }
 }

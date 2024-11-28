@@ -3,6 +3,8 @@ package com.aluracursos.litealura.principal;
 import com.aluracursos.litealura.model.Autor;
 import com.aluracursos.litealura.model.Libro;
 import com.aluracursos.litealura.service.LibroService;
+import com.aluracursos.litealura.utils.IdiomaUtils;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -22,13 +24,15 @@ public class Principal {
         do {
             System.out.println("""
                     *** MENÚ DE GESTIÓN DE LIBROS ***
-                    1 - Buscar y guardar un libro
-                    2 - Buscar y guardar libros por autor
+                    1 - Guardar un libro
+                    2 - Guardar libros por autor
                     3 - Mostrar todos los libros
                     4 - Buscar libro por título
                     5 - Buscar libros por autor
                     6 - Mostrar todos los autores
                     7 - Mostrar autores vivos en un año especifíco
+                    8 - Mostrar estadisticas de libros por idioma
+                    
                     0 - Salir
                     """);
             System.out.print("Selecciona una opción: ");
@@ -43,10 +47,12 @@ public class Principal {
                 case 1 -> buscarYGuardarLibro();
                 case 2 -> buscarYGuardarLibrosPorAutor();
                 case 3 -> mostrarTodosLosLibros();
-                //case 4 -> buscarLibroporTitulo();
+                case 4 -> buscarLibroporTitulo();
                 case 5 -> buscarLibrosPorAutor();
                 case 6 -> mostrarTodosLosAutores();
                 case 7 -> mostrarAutoresVivos();
+                case 8 -> mostrarEstadisticasPorIdioma();
+
                 case 0 -> System.out.println("Cerrando la aplicación...");
                 default -> System.out.println("Opción no valida.");
             }
@@ -62,6 +68,7 @@ public class Principal {
         } catch (Exception e){
             System.err.println("\nError al buscar el libro: " + e.getMessage());
         }
+        System.out.println();
     }
 
     private void buscarYGuardarLibrosPorAutor() {
@@ -77,6 +84,7 @@ public class Principal {
             System.out.println("Libros encontrados para el autor " + nombreAutor + ":");
             libros.forEach(System.out::println);
         }
+        System.out.println();
     }
 
     private void mostrarTodosLosLibros() {
@@ -89,7 +97,7 @@ public class Principal {
         // Cálculo dinámico de los anchos de columna
         int anchoTitulo = Math.max(
                 "Título".length(),
-                libros.stream().mapToInt(libro -> libro.getTitulo().length()).max().orElse(10)
+                libros.stream().mapToInt(libro -> libro.getTitulo().length()).max().orElse("Título".length())
         );
         int anchoAutor = Math.max(
                 "Autor(es)".length(),
@@ -97,20 +105,23 @@ public class Principal {
                         .mapToInt(libro -> libro.getAutor() != null && libro.getAutor().getNombre() != null
                                 ? libro.getAutor().getNombre().length()
                                 : "Desconocido".length()
-                        ).max().orElse(10)
+                        ).max().orElse("Autor(es)".length())
         );
         int anchoIdioma = Math.max(
                 "Idioma(s)".length(),
-                libros.stream().mapToInt(libro -> libro.getIdioma() != null ? libro.getIdioma().length() : 2).max().orElse(10)
+                libros.stream().mapToInt(libro -> libro.getIdioma() != null ? libro.getIdioma().length() : 2).max()
+                        .orElse("Idioma(s)".length())
         );
         int anchoDescargas = Math.max(
                 "Descargas".length(),
-                libros.stream().mapToInt(libro -> String.valueOf(libro.getNumeroDeDescargas()).length()).max().orElse(9)
+                libros.stream().mapToInt(libro -> String.valueOf(libro.getNumeroDeDescargas()).length()).max()
+                        .orElse("Descargas".length())
         );
 
         // Encabezado
         System.out.printf(
-                "%-5s %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas + "s%n",
+                "%-5s %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas
+                        + "s%n",
                 "ID", "Título", "Autor(es)", "Idioma(s)", "Descargas"
         );
         System.out.println("-".repeat(5 + anchoTitulo + anchoAutor + anchoIdioma + anchoDescargas + 15));
@@ -118,7 +129,8 @@ public class Principal {
         // Filas
         for (Libro libro : libros) {
             System.out.printf(
-                    "%-5d %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas + "d%n",
+                    "%-5d %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas
+                            + "d%n",
                     libro.getId(),
                     libro.getTitulo(),
                     libro.getAutor() != null && libro.getAutor().getNombre() != null
@@ -128,18 +140,66 @@ public class Principal {
                     libro.getNumeroDeDescargas()
             );
         }
+        System.out.println();
     }
 
- /*   private void buscarLibroporTitulo(){
+  private void buscarLibroporTitulo(){
         System.out.println("Escribe el título del libro que deseas buscar:");
-        String nombreLibro = teclado.nextLine();
-        Optional<Libro> libro = libroService.(nombreLibro);
+        var nombreLibro = teclado.nextLine();
+        List<Libro> libros = libroService.buscarLibroPorTitulo(nombreLibro);
 
-        libro.ifPresentOrElse(
-                l -> System.out.println("El libro es:\n " + l),
-                () -> System.out.println("Libro no encontrado.")
-        );
-    }*/
+        if (libros.isEmpty()) {
+            System.out.println("No se encontraron libros con ese titulo");
+        }
+
+      // Cálculo dinámico de los anchos de columna
+      int anchoTitulo = Math.max(
+              "Título".length(),
+              libros.stream().mapToInt(libro -> libro.getTitulo().length()).max().orElse("Título".length())
+      );
+      int anchoAutor = Math.max(
+              "Autor(es)".length(),
+              libros.stream()
+                      .mapToInt(libro -> libro.getAutor() != null && libro.getAutor().getNombre() != null
+                              ? libro.getAutor().getNombre().length()
+                              : "Desconocido".length()
+                      ).max().orElse("Autor(es)".length())
+      );
+      int anchoIdioma = Math.max(
+              "Idioma(s)".length(),
+              libros.stream().mapToInt(libro -> libro.getIdioma() != null ? libro.getIdioma().length() : 2).max()
+                      .orElse("Idioma(s)".length())
+      );
+      int anchoDescargas = Math.max(
+              "Descargas".length(),
+              libros.stream().mapToInt(libro -> String.valueOf(libro.getNumeroDeDescargas()).length()).max()
+                      .orElse("Descargas".length())
+      );
+
+      // Encabezado
+      System.out.printf(
+              "%-5s %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas
+                      + "s%n",
+              "ID", "Título", "Autor(es)", "Idioma(s)", "Descargas"
+      );
+      System.out.println("-".repeat(5 + anchoTitulo + anchoAutor + anchoIdioma + anchoDescargas + 15));
+
+      // Filas
+      for (Libro libro : libros) {
+          System.out.printf(
+                  "%-5d %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas
+                          + "d%n",
+                  libro.getId(),
+                  libro.getTitulo(),
+                  libro.getAutor() != null && libro.getAutor().getNombre() != null
+                          ? libro.getAutor().getNombre()
+                          : "Desconocido",
+                  libro.getIdioma() != null ? libro.getIdioma() : "N/A",
+                  libro.getNumeroDeDescargas()
+          );
+      }
+      System.out.println();
+    }
 
     private void buscarLibrosPorAutor(){
         System.out.println("Escribe el nombre del autor que deseas buscar:");
@@ -181,6 +241,7 @@ public class Principal {
                     autor.getAnioFallecimiento() != null ? autor.getAnioFallecimiento() : "N/A"
             );
         }
+        System.out.println();
     }
 
     private void mostrarAutoresVivos() {
@@ -218,5 +279,20 @@ public class Principal {
                             : "Vivo"
             );
         }
+        System.out.println();
     }
+
+    private void mostrarEstadisticasPorIdioma(){
+        Map<String, Long> estadisticas = libroService.mostrarEstadisticasLibrosPorIdioma();
+        System.out.println("Estadisticas de libros por idioma:");
+        System.out.printf("%-20s%-10s\n", "Idioma", "Cantidad");
+        System.out.println("---------------------------------");
+        estadisticas.forEach((codigoIdioma, cantidad) -> {
+            String nombreIdioma = IdiomaUtils.obtenerNombreIdioma(codigoIdioma);
+            System.out.printf("%-20s%-10d\n", nombreIdioma, cantidad);
+        });
+        System.out.println();
+    }
+
+    
 }
