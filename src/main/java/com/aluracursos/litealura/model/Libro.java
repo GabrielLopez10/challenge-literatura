@@ -2,6 +2,7 @@ package com.aluracursos.litealura.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
@@ -10,12 +11,14 @@ public class Libro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(unique = true)
     private String titulo;
 
-    private String autor;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "autor_id", nullable = false)
+    private Autor autor;
 
     private String idioma;
 
@@ -23,39 +26,32 @@ public class Libro {
 
     public Libro() {}
 
-    public Libro(DatosLibros datosLibros){
+    public Libro(DatosLibros datosLibros, Autor autor){
         this.titulo = datosLibros.titulo();
-        this.autor = (datosLibros.autor() != null && !datosLibros.autor().isEmpty())
-        ? datosLibros.autor().get(0).nombre()
-        : "Autor Desconocido";
-        this.idioma = (datosLibros.idioma() != null && !datosLibros.idioma().isEmpty()
-        ?datosLibros.idioma().get(0)
-                :"Idioma desconocido");
+        this.autor = autor;
+        this.idioma = (datosLibros.idioma() != null && !datosLibros.idioma().isEmpty())
+                ? datosLibros.idioma().get(0)
+                : "Idioma desconocido";
         this.numeroDeDescargas = datosLibros.numeroDeDescargas();
     }
 
     @Override
     public String toString() {
-        String autores = (autor != null && !autor.isEmpty()) ? autor : "Autor no disponible";
-
-        String idiomas = (idioma != null && !idioma.isEmpty()) ? String.join(", ", idioma)
-                : "Idioma no disponible";
-
         return String.format(
-                        "Título: '%s', \n" +
-                        " Autor(es): %s, \n" +
-                        " Idioma(s): %s, \n" +
-                        " Número de Descargas: %d\n",
-                titulo, autores, idiomas, numeroDeDescargas
+                "Título: '%s', Autor: '%s', Idioma: '%s', Número de Descargas: %d",
+                titulo,
+                autor != null ? autor.getNombre() : "Autor no disponible",
+                idioma,
+                numeroDeDescargas
         );
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -66,11 +62,11 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getAutor() {
+    public Autor getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(Autor autor) {
         this.autor = autor;
     }
 

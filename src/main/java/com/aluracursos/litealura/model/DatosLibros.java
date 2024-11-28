@@ -3,7 +3,6 @@ package com.aluracursos.litealura.model;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.Collections;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,10 +17,8 @@ public record DatosLibros(
 ) {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record Author(
-            @JsonAlias("name") String nombre
+            @JsonAlias("name") String nombre,
+            @JsonAlias("birth_year") Integer anioNacimiento,
+            @JsonAlias("death_year") Integer anioFallecimiento
     ) {}
-
-    public List<Author> getAutores() {
-        return (autor != null) ? autor : Collections.emptyList();
-    }
 }
