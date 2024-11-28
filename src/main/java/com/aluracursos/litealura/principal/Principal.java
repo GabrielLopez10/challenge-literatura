@@ -4,7 +4,6 @@ import com.aluracursos.litealura.model.Autor;
 import com.aluracursos.litealura.model.Libro;
 import com.aluracursos.litealura.service.LibroService;
 import com.aluracursos.litealura.utils.IdiomaUtils;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -78,13 +77,19 @@ public class Principal {
 
         List<Libro> libros = libroService.buscarLibroPorAutor(nombreAutor);
 
-        if (libros.isEmpty()) {
-            System.out.println("No se encontraron libros para el autor: " + nombreAutor);
-        } else {
-            System.out.println("Libros encontrados para el autor " + nombreAutor + ":");
-            libros.forEach(System.out::println);
-        }
-        System.out.println();
+        List<Object[]> filas = new ArrayList<>();
+        libros.forEach(libro -> filas.add(
+                new Object[] {
+                        libro.getId(),
+                        libro.getTitulo(),
+                        libro.getAutor() != null ? libro.getAutor().getNombre() : "Desconocido",
+                        libro.getIdioma() != null ? libro.getIdioma() : "N/A",
+                        libro.getNumeroDeDescargas()
+                }));
+
+        String[] encabezados = {"ID", "Título", "Autor", "Idioma", "Descargas"};
+
+        imprimirTablaDinamica(filas, encabezados);
     }
 
     private void mostrarTodosLosLibros() {
@@ -94,53 +99,19 @@ public class Principal {
             return;
         }
 
-        // Cálculo dinámico de los anchos de columna
-        int anchoTitulo = Math.max(
-                "Título".length(),
-                libros.stream().mapToInt(libro -> libro.getTitulo().length()).max().orElse("Título".length())
-        );
-        int anchoAutor = Math.max(
-                "Autor(es)".length(),
-                libros.stream()
-                        .mapToInt(libro -> libro.getAutor() != null && libro.getAutor().getNombre() != null
-                                ? libro.getAutor().getNombre().length()
-                                : "Desconocido".length()
-                        ).max().orElse("Autor(es)".length())
-        );
-        int anchoIdioma = Math.max(
-                "Idioma(s)".length(),
-                libros.stream().mapToInt(libro -> libro.getIdioma() != null ? libro.getIdioma().length() : 2).max()
-                        .orElse("Idioma(s)".length())
-        );
-        int anchoDescargas = Math.max(
-                "Descargas".length(),
-                libros.stream().mapToInt(libro -> String.valueOf(libro.getNumeroDeDescargas()).length()).max()
-                        .orElse("Descargas".length())
-        );
+        List<Object[]> filas = new ArrayList<>();
+        libros.forEach(libro -> filas.add(
+                new Object[] {
+                        libro.getId(),
+                        libro.getTitulo(),
+                        libro.getAutor() != null ? libro.getAutor().getNombre() : "Desconocido",
+                        libro.getIdioma() != null ? libro.getIdioma() : "N/A",
+                        libro.getNumeroDeDescargas()
+                }));
 
-        // Encabezado
-        System.out.printf(
-                "%-5s %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas
-                        + "s%n",
-                "ID", "Título", "Autor(es)", "Idioma(s)", "Descargas"
-        );
-        System.out.println("-".repeat(5 + anchoTitulo + anchoAutor + anchoIdioma + anchoDescargas + 15));
+        String[] encabezados = {"ID", "Título", "Autor", "Idioma", "Descargas"};
 
-        // Filas
-        for (Libro libro : libros) {
-            System.out.printf(
-                    "%-5d %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas
-                            + "d%n",
-                    libro.getId(),
-                    libro.getTitulo(),
-                    libro.getAutor() != null && libro.getAutor().getNombre() != null
-                            ? libro.getAutor().getNombre()
-                            : "Desconocido",
-                    libro.getIdioma() != null ? libro.getIdioma() : "N/A",
-                    libro.getNumeroDeDescargas()
-            );
-        }
-        System.out.println();
+        imprimirTablaDinamica(filas, encabezados);
     }
 
   private void buscarLibroporTitulo(){
@@ -152,53 +123,19 @@ public class Principal {
             System.out.println("No se encontraron libros con ese titulo");
         }
 
-      // Cálculo dinámico de los anchos de columna
-      int anchoTitulo = Math.max(
-              "Título".length(),
-              libros.stream().mapToInt(libro -> libro.getTitulo().length()).max().orElse("Título".length())
-      );
-      int anchoAutor = Math.max(
-              "Autor(es)".length(),
-              libros.stream()
-                      .mapToInt(libro -> libro.getAutor() != null && libro.getAutor().getNombre() != null
-                              ? libro.getAutor().getNombre().length()
-                              : "Desconocido".length()
-                      ).max().orElse("Autor(es)".length())
-      );
-      int anchoIdioma = Math.max(
-              "Idioma(s)".length(),
-              libros.stream().mapToInt(libro -> libro.getIdioma() != null ? libro.getIdioma().length() : 2).max()
-                      .orElse("Idioma(s)".length())
-      );
-      int anchoDescargas = Math.max(
-              "Descargas".length(),
-              libros.stream().mapToInt(libro -> String.valueOf(libro.getNumeroDeDescargas()).length()).max()
-                      .orElse("Descargas".length())
-      );
+      List<Object[]> filas = new ArrayList<>();
+      libros.forEach(libro -> filas.add(
+              new Object[] {
+                      libro.getId(),
+                      libro.getTitulo(),
+                      libro.getAutor() != null ? libro.getAutor().getNombre() : "Desconocido",
+                      libro.getIdioma() != null ? libro.getIdioma() : "N/A",
+                      libro.getNumeroDeDescargas()
+              }));
 
-      // Encabezado
-      System.out.printf(
-              "%-5s %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas
-                      + "s%n",
-              "ID", "Título", "Autor(es)", "Idioma(s)", "Descargas"
-      );
-      System.out.println("-".repeat(5 + anchoTitulo + anchoAutor + anchoIdioma + anchoDescargas + 15));
+      String[] encabezados = {"ID", "Título", "Autor", "Idioma", "Descargas"};
 
-      // Filas
-      for (Libro libro : libros) {
-          System.out.printf(
-                  "%-5d %-" + anchoTitulo + "s %-" + anchoAutor + "s %-" + anchoIdioma + "s %-" + anchoDescargas
-                          + "d%n",
-                  libro.getId(),
-                  libro.getTitulo(),
-                  libro.getAutor() != null && libro.getAutor().getNombre() != null
-                          ? libro.getAutor().getNombre()
-                          : "Desconocido",
-                  libro.getIdioma() != null ? libro.getIdioma() : "N/A",
-                  libro.getNumeroDeDescargas()
-          );
-      }
-      System.out.println();
+      imprimirTablaDinamica(filas, encabezados);
     }
 
     private void buscarLibrosPorAutor(){
@@ -211,7 +148,19 @@ public class Principal {
             return;
         }
         System.out.println("*** LIBROS DEL AUTOR ***");
-        libros.forEach(System.out::println);
+        List<Object[]> filas = new ArrayList<>();
+        libros.forEach(libro -> filas.add(
+                new Object[] {
+                        libro.getId(),
+                        libro.getTitulo(),
+                        libro.getAutor() != null ? libro.getAutor().getNombre() : "Desconocido",
+                        libro.getIdioma() != null ? libro.getIdioma() : "N/A",
+                        libro.getNumeroDeDescargas()
+                }));
+
+        String[] encabezados = {"ID", "Título", "Autor", "Idioma", "Descargas"};
+
+        imprimirTablaDinamica(filas, encabezados);
     }
 
     private void mostrarTodosLosAutores() {
@@ -221,27 +170,19 @@ public class Principal {
             return;
         }
 
-        int anchoNombre = Math.max(
-                "Nombre".length(),
-                autores.stream().mapToInt(a -> a.getNombre().length()).max().orElse(30)
-        );
+        List<Object[]> filas = new ArrayList<>();
+        autores.forEach(autor -> filas.add(
+                new Object[]{
+                        autor.getId(),
+                        autor.getNombre(),
+                        autor.getAnioNacimiento(),
+                        autor.getAnioFallecimiento() != null ? autor.getAnioFallecimiento()
+                                : "Vivo"
+                }));
 
-        // Encabezado de la tabla
-        System.out.printf("%-5s %-" + anchoNombre + "s %-15s %-15s%n",
-                "ID", "Nombre", "Año Nacimiento", "Año Fallecimiento");
-        System.out.println("-".repeat(5 + anchoNombre + 15 + 15));
+        String[] encabezados = {"ID", "Nombre", "Año Nacimiento", "Año Fallecimiento"};
 
-        // Filas de la tabla
-        for (Autor autor : autores) {
-            System.out.printf(
-                    "%-5d %-" + anchoNombre + "s %-15s %-15s%n",
-                    autor.getId(),
-                    autor.getNombre(),
-                    autor.getAnioNacimiento() != null ? autor.getAnioNacimiento() : "N/A",
-                    autor.getAnioFallecimiento() != null ? autor.getAnioFallecimiento() : "N/A"
-            );
-        }
-        System.out.println();
+        imprimirTablaDinamica(filas, encabezados);
     }
 
     private void mostrarAutoresVivos() {
@@ -259,40 +200,76 @@ public class Principal {
             return;
         }
 
-        //Ancho dinámico del ancho de columnas
-        int anchoNombre = Math.max(
-                "Nombre".length(),
-                autores.stream().mapToInt(a -> a.getNombre().length()).max().orElse(10)
-        );
+        List<Object[]> filas = new ArrayList<>();
+        autores.forEach(autor -> filas.add(
+                new Object[]{
+                        autor.getId(),
+                        autor.getNombre(),
+                        autor.getAnioNacimiento(),
+                        autor.getAnioFallecimiento() != null ? autor.getAnioFallecimiento()
+                                : "Vivo"
+                }));
 
-        System.out.printf("%-5s %-" + anchoNombre + "s %-15s %-15s%n", "ID", "Nombre", "Año Nacimiento",
-                "Año Fallecimiento");
-        System.out.println("-".repeat(5 + anchoNombre + 30));
+        String[] encabezados = {"ID", "Nombre", "Año Nacimiento", "Año Fallecimiento"};
 
-        for (Autor autor : autores) {
-            System.out.printf(
-                    "%-5d %-" + anchoNombre + "s %-15d %-15s%n",
-                    autor.getId(),
-                    autor.getNombre(),
-                    autor.getAnioNacimiento(),
-                    autor.getAnioFallecimiento() != null ? autor.getAnioFallecimiento()
-                            : "Vivo"
-            );
-        }
-        System.out.println();
+        imprimirTablaDinamica(filas, encabezados);
     }
 
     private void mostrarEstadisticasPorIdioma(){
         Map<String, Long> estadisticas = libroService.mostrarEstadisticasLibrosPorIdioma();
         System.out.println("Estadisticas de libros por idioma:");
-        System.out.printf("%-20s%-10s\n", "Idioma", "Cantidad");
-        System.out.println("---------------------------------");
+        List<Object[]> filas = new ArrayList<>();
         estadisticas.forEach((codigoIdioma, cantidad) -> {
             String nombreIdioma = IdiomaUtils.obtenerNombreIdioma(codigoIdioma);
-            System.out.printf("%-20s%-10d\n", nombreIdioma, cantidad);
+            filas.add((new Object[] {nombreIdioma, cantidad}));
         });
-        System.out.println();
+
+        String[] encabezados = {"Idioma", "Cantidad"};
+
+        System.out.println("\nEstadísticas de libros por idiomas:");
+        imprimirTablaDinamica(filas, encabezados);
     }
 
-    
+    private void imprimirTablaDinamica(List<Object[]> filas, String[] encabezados) {
+
+        int[] anchoColumnas = new int[encabezados.length];
+
+        for (int i = 0; i < encabezados.length; i++) {
+            anchoColumnas[i] = encabezados[i].length();
+        }
+
+        for (Object[] fila : filas) {
+            for (int i = 0; i < fila.length; i++) {
+                int longitudDato = fila[i] != null ? fila[i].toString().length() : 0;
+                anchoColumnas[i] = Math.max(anchoColumnas[i], longitudDato);
+            }
+        }
+
+        StringBuilder encabezado = new StringBuilder();
+        for (int i = 0; i < encabezados.length; i++) {
+            encabezado.append(String.format("%-" + anchoColumnas[i] + "s", encabezados[i]));
+            if (i < encabezados.length - 1) {
+                encabezado.append(" | ");
+            }
+        }
+        System.out.println(encabezado);
+
+        String lineaSeparadora = "-".repeat(encabezado.length());
+        System.out.println(lineaSeparadora);
+
+        for (Object[] fila : filas) {
+            StringBuilder filaString = new StringBuilder();
+            for (int i = 0; i <  fila.length; i++) {
+                filaString.append(String.format("%-" + anchoColumnas[i] + "s", fila[i] != null
+                        ? fila[i].toString() : "N/A"));
+
+                if (i < fila.length - 1) {
+                    filaString.append(" | ");
+                }
+            }
+            System.out.println(filaString);
+
+            System.out.println(lineaSeparadora);
+        }
+    }
 }
