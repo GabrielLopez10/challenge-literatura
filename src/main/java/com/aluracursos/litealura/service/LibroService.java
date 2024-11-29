@@ -47,7 +47,7 @@ public class LibroService {
         System.out.println("Primer libro encontrado: " + biblioteca.resultados().get(0).titulo());
         DatosLibros datosLibros = biblioteca.resultados().get(0);
 
-        // Obtener el autor a
+        // Obtener el autor
         Autor autor = datosLibros.autor().isEmpty()
                 ? new Autor("Autor Desconocido", null, null)
                 : obtenerOCrearAutor(
@@ -151,5 +151,9 @@ public class LibroService {
 
         return libros.stream()
                 .collect(Collectors.groupingBy(Libro::getIdioma, Collectors.counting()));
+    }
+
+    public List<Libro> obtenerTop10LibrosMasDescargados() {
+        return libroRepository.findTop10ByOrderByNumeroDeDescargasDesc();
     }
 }

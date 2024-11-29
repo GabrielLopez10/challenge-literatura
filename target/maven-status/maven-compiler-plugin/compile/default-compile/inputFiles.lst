@@ -1,0 +1,14 @@
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/LitealuraApplication.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/config/CorsConfiguration.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/model/Autor.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/model/DatosLibros.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/model/DatosLibrosWrapper.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/model/Libro.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/principal/Principal.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/repository/AutorRepository.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/repository/LibroRepository.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/service/ConsumoAPI.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/service/ConvierteDatos.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/service/IConvierteDatos.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/service/LibroService.java
+/home/gaston10/Desktop/gaston10/projects/challenge-literatura/src/main/java/com/aluracursos/litealura/utils/IdiomaUtils.java

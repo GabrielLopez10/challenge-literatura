@@ -1,0 +1,15 @@
+com/aluracursos/litealura/model/DatosLibros$Author.class
+com/aluracursos/litealura/principal/Principal.class
+com/aluracursos/litealura/model/DatosLibros.class
+com/aluracursos/litealura/repository/LibroRepository.class
+com/aluracursos/litealura/service/LibroService.class
+com/aluracursos/litealura/service/IConvierteDatos.class
+com/aluracursos/litealura/model/Libro.class
+com/aluracursos/litealura/model/Autor.class
+com/aluracursos/litealura/service/ConvierteDatos.class
+com/aluracursos/litealura/LitealuraApplication.class
+com/aluracursos/litealura/repository/AutorRepository.class
+com/aluracursos/litealura/model/DatosLibrosWrapper.class
+com/aluracursos/litealura/utils/IdiomaUtils.class
+com/aluracursos/litealura/service/ConsumoAPI.class
+com/aluracursos/litealura/config/CorsConfiguration.class

@@ -30,7 +30,8 @@ public class Principal {
                     5 - Buscar libros por autor
                     6 - Mostrar todos los autores
                     7 - Mostrar autores vivos en un año especifíco
-                    8 - Mostrar estadisticas de libros por idioma
+                    8 - Mostrar estadísticas de libros por idioma
+                    9 - Mostrar Top 10 de libros más descargados
                     
                     0 - Salir
                     """);
@@ -51,11 +52,15 @@ public class Principal {
                 case 6 -> mostrarTodosLosAutores();
                 case 7 -> mostrarAutoresVivos();
                 case 8 -> mostrarEstadisticasPorIdioma();
+                case 9 -> mostrarTop10LibrosMasDescargados();
 
                 case 0 -> System.out.println("Cerrando la aplicación...");
                 default -> System.out.println("Opción no valida.");
             }
         } while (opcion != 0);
+
+        teclado.close();
+        System.exit(0);
     }
 
     private void buscarYGuardarLibro() {
@@ -227,6 +232,29 @@ public class Principal {
         String[] encabezados = {"Idioma", "Cantidad"};
 
         System.out.println("\nEstadísticas de libros por idiomas:");
+        imprimirTablaDinamica(filas, encabezados);
+    }
+
+    private void mostrarTop10LibrosMasDescargados() {
+        List<Libro> topLibros = libroService.obtenerTop10LibrosMasDescargados();
+
+        if (topLibros.isEmpty()) {
+            System.out.println("No hay libros disponibles.");
+            return;
+        }
+
+        List<Object[]> filas = new ArrayList<>();
+        for (Libro libro : topLibros) {
+            filas.add(new Object[]{
+                    libro.getTitulo(),
+                    libro.getAutor() != null ? libro.getAutor().getNombre() : "Autor Desconocido",
+                    libro.getNumeroDeDescargas()
+            });
+        }
+
+        String[] encabezados = {"Título", "Autor", "Descargas"};
+
+        System.out.println("\n *** Top 10 Libros más Descargados ***");
         imprimirTablaDinamica(filas, encabezados);
     }
 
