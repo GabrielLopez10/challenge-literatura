@@ -52,6 +52,8 @@ spring.jpa.show-sql=true
 
 spring.jpa.properties.hibernate.format_sql=true
 ```
+la variables de entorno estan configurada en el propio Intellij, si lo prefieres podes incluirla
+en el propio sistema.
 
 ### Paso 3: Compilar y ejecutar el proyecto en tu terminal ▶️
 
