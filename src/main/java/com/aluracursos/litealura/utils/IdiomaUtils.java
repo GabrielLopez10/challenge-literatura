@@ -9,7 +9,7 @@ public class IdiomaUtils {
 
     static {
         idiomasMap.put("en", "Inglés");
-        idiomasMap.put("es", "Inglés");
+        idiomasMap.put("es", "Español");
         idiomasMap.put("eo", "Esperanto");
         idiomasMap.put("de", "Alemán");
         idiomasMap.put("la", "Latín");
