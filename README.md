@@ -1,4 +1,3 @@
-![catalogo logo](https://res.cloudinary.com/dfzw74nlk/image/upload/v1732840509/oy6q4bxcy8gwentsyyty.png)
 <p align="center">
   <img src="https://res.cloudinary.com/dfzw74nlk/image/upload/v1732840509/oy6q4bxcy8gwentsyyty.png">
 </p>
