@@ -1,4 +1,4 @@
-![catalogo logo](https://res.cloudinary.com/dfzw74nlk/image/upload/v1732840509/oy6q4bxcy8gwentsyyty.png)
+![catalogo logo](https://res.cloudinary.com/dfzw74nlk/image/upload/v1732840509/oy6q4bxcy8gwentsyyty.png){ width="800" height="600" style="display: block; margin: 0 auto" }
 
 # Catálogo de Libros 📚
 
