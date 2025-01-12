@@ -1,5 +1,7 @@
 ![catalogo logo](https://res.cloudinary.com/dfzw74nlk/image/upload/v1732840509/oy6q4bxcy8gwentsyyty.png)
-
+<p align="center">
+  <img width="460" height="300" src="https://picsum.photos/460/30](https://res.cloudinary.com/dfzw74nlk/image/upload/v1732840509/oy6q4bxcy8gwentsyyty.png">
+</p>
 # Catálogo de Libros 📚
 
 
